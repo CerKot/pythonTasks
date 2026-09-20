@@ -1,7 +1,7 @@
 from random import randint,seed
 import time
 from typing import Callable
-
+from Task2.main import tableCreating
 
 def time_dec(func: Callable):
     def wrapper(*args, **kwargs):
@@ -15,11 +15,12 @@ def time_dec(func: Callable):
 
 
 
+
 def battle_simulation(cloneCount: int,
                       droidCount: int,
                       droidAttackPower: int = 1,
                       killingCloneChance: int = 30,
-                      verbose: bool = False) -> None:
+                      verbose: bool = False) -> dict:
 
     """This function simulates battle between drones and clones
     So, clones damage randomly and drones permanents
@@ -63,28 +64,58 @@ def battle_simulation(cloneCount: int,
               f'{cloneCount} клонов и {droidCount} дроидов')
 
         roundCounter += 1
-
+    winner = None
     if cloneCount == 0 and droidCount == 0:
-        print('• Ничья! Все участники пали в бою!')
+        if verbose:
+            print('• Ничья! Все участники пали в бою!')
     elif cloneCount == 0:
-        print(f'Победа за силами Торговой Федерации!\n'
-              f'Осталось дроидов: {droidCount}')
+        winner = "Дроиды"
+        if verbose:
+            print(f'Победа за силами Торговой Федерации!\n'
+                f'Осталось дроидов: {droidCount}')
     elif droidCount == 0:
-        print(f'Победа за силами Галактической Республики!\n'
-             f'Осталось клонов: {cloneCount}')
-@time_dec
-def manyCallings(N:int, cloneCount: int,
-                 droidCount: int, droidAttackPower: int = 1,
-                 killingCloneChance:int = 30, verbose: bool = False) -> None:
-    """This function calls battle_simulation (function) N times"""
+        winner = "Клоны"
+        if verbose:
+            print(f'Победа за силами Галактической Республики!\n'
+                 f'Осталось клонов: {cloneCount}')
+    return {"cloneCount" : cloneCount,
+            "droidCount" : droidCount,
+            "winner" : winner,
+            "rounds" : roundCounter
+            }
 
+@time_dec
+def manyCallings(cloneCount: int,
+                 droidCount: int,
+                 N:int = 1000,
+                 droidAttackPower: int = 1,
+
+                 killingCloneChance:int = 30, verbose: bool = False) -> dict:
+    """This function calls battle_simulation (function) N times"""
+    roundCounter: int = 0
+    droidWinCounter: int = 0
+    cloneWinCounter: int = 0
+    aliveCounter: int = 0
     for _ in range(N):
-        battle_simulation(cloneCount=cloneCount,droidCount=droidCount,
+        results = battle_simulation(cloneCount=cloneCount,droidCount=droidCount,
                           droidAttackPower=droidAttackPower,
                           killingCloneChance=killingCloneChance,
                           verbose=verbose)
+        aliveCounter += results["cloneCount"] + results["droidCount"]
 
+        if results["winner"] == "Дроиды":
+            droidWinCounter += 1
+        elif results["winner"] == "Клоны":
+            cloneWinCounter += 1
+        roundCounter += results["rounds"]
+    return {"meanAliveNumber": aliveCounter // N,
+            "meanDroidWinCounter": droidWinCounter // N,
+            "meanCloneWinCounter": cloneWinCounter // N,
+            "meanRoundCounter": roundCounter // N
+            }
 if __name__ == '__main__':
     seed(1)
-    manyCallings(100,battle_simulation,cloneCount = 10, droidCount = 20)
-
+    details = manyCallings(cloneCount = 10, droidCount = 20)
+    data = []
+    ...
+    #Как должна выглядить таблица? ....
