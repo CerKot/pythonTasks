@@ -1,4 +1,4 @@
-from random import randint,seed
+import random
 import time
 from typing import Callable
 from Task2.main import tableCreating
@@ -12,8 +12,6 @@ def time_dec(func: Callable):
         return result
 
     return wrapper
-
-
 
 
 def battle_simulation(cloneCount: int,
@@ -46,18 +44,19 @@ def battle_simulation(cloneCount: int,
             print(f'Количество дроидов: {droidCount}')
             print(f'Количество клонов: {cloneCount}')
 
-        droidCountInRound: int = droidCount
+
+        # Атака дроидов
+        cloneCount = max(0, cloneCount - droidCount // droidAttackPower)
 
         #Атака клонов:
         for _ in range(cloneCount):
-            if randint(1,100) >= killingCloneChance:
+            if random.randint(1,100) >= killingCloneChance:
                 droidCount -= 1
             if droidCount == 0:
                 break
 
 
-        #Атака дроидов
-        cloneCount = max(0, cloneCount - droidCountInRound // droidAttackPower)
+
 
         if verbose:
             print(f'После битвы между дроидами и клонами осталось '
@@ -81,7 +80,7 @@ def battle_simulation(cloneCount: int,
     return {"cloneCount" : cloneCount,
             "droidCount" : droidCount,
             "winner" : winner,
-            "rounds" : roundCounter
+            "rounds" : roundCounter - 1
             }
 
 @time_dec
@@ -89,8 +88,8 @@ def manyCallings(cloneCount: int,
                  droidCount: int,
                  N:int = 1000,
                  droidAttackPower: int = 1,
-
                  killingCloneChance:int = 30, verbose: bool = False) -> dict:
+
     """This function calls battle_simulation (function) N times"""
     roundCounter: int = 0
     droidWinCounter: int = 0
@@ -108,14 +107,18 @@ def manyCallings(cloneCount: int,
         elif results["winner"] == "Клоны":
             cloneWinCounter += 1
         roundCounter += results["rounds"]
-    return {"meanAliveNumber": aliveCounter // N,
+    return {
+            "meanAliveNumber": aliveCounter // N,
             "meanDroidWinCounter": droidWinCounter // N,
             "meanCloneWinCounter": cloneWinCounter // N,
             "meanRoundCounter": roundCounter // N
             }
+
 if __name__ == '__main__':
-    seed(1)
+    seedKey = input('Напиши что-нибудь для ключа\n')
+    random.seed(seedKey)
     details = manyCallings(cloneCount = 10, droidCount = 20)
     data = []
-    ...
-    #Как должна выглядить таблица? ....
+    tableCreating(title="Статистика", header=[name for name in details],
+                  data=[[value for value in details.values()]],place_to_value=20)
+
