@@ -1,4 +1,17 @@
 from collections import UserList
+from typing import Callable
+import time
+
+def time_dec(func: Callable):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f'Время выполнения функции: {end-start} с')
+        return result
+
+    return wrapper
+
 
 class ourNewList(UserList):
     @classmethod
@@ -32,4 +45,4 @@ list = ourNewList
 
 lst = list([1,2,3,4,5])
 
-print(lst[-1])
+print(lst[-1:1:-1])

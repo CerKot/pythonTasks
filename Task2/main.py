@@ -1,4 +1,3 @@
-#Пусть будет 1-ый вариант...
 import math
 def vat_to_dbm(power: float) -> float:
     """This function translates power from vatt to dBm
@@ -89,35 +88,36 @@ def get_float_input_value(query_to_user: str,
             return float(userInput)
         print(error_message)
 
-def tableCreating(title: str, header: list[str],data: list[ list[float] ],
+def table_create(title: str, header: list[str],data: list[ list[float] ],
                   precision: int = 3,
                   place_to_value:int = 10) -> None:
-
-    valuesLength = len(header)
-    if not all(len(i) == valuesLength for i in data):
+    eps = 1e-6
+    values_length = len(header)
+    if not all(len(i) == values_length for i in data):
         raise TypeError("We can not create table, because of number of translations "
                         "is not equal number of translation functions ")
-    print(f'{title:*^{valuesLength * place_to_value + valuesLength + 1}}')
+    print(f'{title:*^{values_length * place_to_value + values_length + 1}}')
 
     #roof
-    roof: str = (valuesLength * place_to_value + valuesLength + 1) * "-"
+    roof: str = (values_length * place_to_value + values_length + 1) * "-"
 
     print(roof)
-    [print(f"|{i:^{place_to_value}}", end = '') for i in header]
+    for row in header:
+        print(f"|{row:^{place_to_value}}", end='')
+
     print("|")
     print(roof)
 
     for row in data:
         for number in row:
-            if 0 < abs(number) - abs(int(number)) < 1e-6:
-                numberFormat = 'e'
+            if 0 < abs(number) - abs(int(number)) < eps:
+                number_format = 'e'
                 number_precision = 1
             else:
                 number_precision = precision
-                numberFormat = 'f'
-            print(f"|{number:^{place_to_value}.{number_precision}{numberFormat}}", end = '')
+                number_format = 'f'
+            print(f"|{number:^{place_to_value}.{number_precision}{number_format}}", end = '')
 
-        #[ for i in row]
         print("|")
         print(roof)
 
@@ -133,5 +133,4 @@ if __name__ == "__main__":
     for i in range(10):
         data.append([i+voltage,volt_to_dbv(i+voltage)])
     print(data)
-    tableCreating("Таблица",['В','дБВ'],data=data)
-
+    table_create("Таблица",['В','дБВ'],data=data)
