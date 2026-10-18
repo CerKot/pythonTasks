@@ -1,18 +1,18 @@
 from typing import Callable
 
-from Task2.Task2_1.data import ship_systems
 
 
 #Part A
 
-def get_sci_fi_books(library_archive: tuple[str,str,int,int,str]) -> list[tuple]:
+def get_sci_fi_books(library_archive: list[tuple[str,str,int,int,str]]) -> list[tuple]:
+
     sci_fi_books = []
     for title,name,year,pages,genre in library_archive:
         if genre == "Научная фантастика":
             sci_fi_books.append((title,name,year,pages,genre))
     return sci_fi_books
 
-def get_short_book_titles(library_archive: tuple[str,str,int,int,str]) -> list[str]:
+def get_short_book_titles(library_archive: list[tuple[str,str,int,int,str]]) -> list[str]:
     book_titles = []
     for title, *_ in library_archive:
         book_titles.append(title)
@@ -23,7 +23,7 @@ def get_short_book_titles(library_archive: tuple[str,str,int,int,str]) -> list[s
 
     return short_books_before_1950
 
-def get_books_by_author(library_archive: tuple[str,str,int,int,str]) -> dict:
+def get_books_by_author(library_archive: list[tuple[str,str,int,int,str]]) -> dict:
 
     books_by_author = {}
     for _, author, *_ in library_archive:
@@ -35,7 +35,7 @@ def get_books_by_author(library_archive: tuple[str,str,int,int,str]) -> dict:
 
     return books_by_author
 
-def get_avg_page_count_from_library(library_archive: tuple[str,str,int,int,str]) -> float | None:
+def get_avg_page_count_from_library(library_archive: list[tuple[str,str,int,int,str]]) -> float | None:
     page_count = 0
     for *_,pages,_ in library_archive:
         page_count += pages

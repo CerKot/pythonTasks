@@ -1,28 +1,44 @@
 from typing import Callable
 
+from Task2.Task2_1.solution_loops import get_sci_fi_books
+
+
 #Part A
 
-def get_sci_fi_books(library_archive: tuple[str,str,int,int,str]) -> list[tuple]:
+def print_dec(function):
+    def wrapper(*args, **kwargs):
+        answer = function(*args,**kwargs)
+        print(answer)
+        return answer
+
+    return wrapper
+
+
+
+@print_dec
+def get_sci_fi_books(library_archive: list[tuple[str,str,int,int,str]]) -> list[tuple]:
 
     sci_fi_books = [(title,name,year,pages,genre)
                     for title,name,year,pages,genre in library_archive
                     if genre == "Научная фантастика"]
     return sci_fi_books
 
-def get_short_book_titles(library_archive: tuple[str,str,int,int,str]) -> list[str]:
-    book_titles = [title for title, *_ in library_archive]
+@print_dec
+def get_short_book_titles(library_archive: list[tuple[str,str,int,int,str]]) -> list[str]:
 
     short_books_before_1950 = [title
                for title,_,year,pages,_ in library_archive if year <= 1950 and pages < 300]
 
     return short_books_before_1950
 
-def get_books_by_author(library_archive: tuple[str,str,int,int,str]) -> dict:
+@print_dec
+def get_books_by_author(library_archive: list[tuple[str,str,int,int,str]]) -> dict:
     books_by_author = {author: tuple(title for title,a,*_ in library_archive if a == author)
                    for _, author, *_ in library_archive}
     return books_by_author
 
-def get_avg_page_count_from_library(library_archive: tuple[str,str,int,int,str]) -> float | None:
+@print_dec
+def get_avg_page_count_from_library(library_archive: list[tuple[str,str,int,int,str]]) -> float | None:
     avg_page_count = (
                       sum((pages for _,_,_,pages,_ in library_archive)) / len(library_archive)
                       if library_archive else None
@@ -32,6 +48,7 @@ def get_avg_page_count_from_library(library_archive: tuple[str,str,int,int,str])
 #Part B
 
 #1
+@print_dec
 def get_avg_exp_by_job(crew_members:list[tuple]) -> dict:
     avg_exp_by_job = {targ_job:
                      sum(exp for _,job,exp, _ in crew_members if job == targ_job) /
@@ -40,6 +57,7 @@ def get_avg_exp_by_job(crew_members:list[tuple]) -> dict:
     return avg_exp_by_job
 
 #2
+@print_dec
 def get_high_salary_members(crew_members:list[tuple])->list:
 
     high_salary_members = [f'{name}:{salary}' for name,_,exp,salary in crew_members
@@ -48,6 +66,7 @@ def get_high_salary_members(crew_members:list[tuple])->list:
     return high_salary_members
 
 #3
+@print_dec
 def get_member_count_of_systems(crew_members: list[tuple],
                                 ship_systems: dict) -> dict:
 
@@ -59,6 +78,7 @@ def get_member_count_of_systems(crew_members: list[tuple],
     return member_count_of_systems
 
 #4
+@print_dec
 def get_member_bonuses(crew_members: list[tuple]) -> dict:
     member_bonuses = {name:(salary * 0.1 if age <=  5 else salary * 0.15)
                       for name,_,age,salary in crew_members
@@ -66,12 +86,14 @@ def get_member_bonuses(crew_members: list[tuple]) -> dict:
     return member_bonuses
 
 #5
+@print_dec
 def get_little_systems(ship_systems: dict) -> list:
 
     little_systems = [system for system in ship_systems if len(ship_systems[system]) < 2]
     return little_systems
 
 #6
+@print_dec
 def get_member_list(crew_members: list[tuple],
                     ship_systems: dict,
                     get_member_count_of_systems: Callable,
