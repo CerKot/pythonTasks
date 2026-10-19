@@ -40,13 +40,10 @@ def test_get_little_system():
 def test_get_member_list():
     assert (s_p.get_member_list(crew_members,
                                 ship_systems,
-                                s_p.get_member_count_of_systems,
-                                s_p.get_member_bonuses
                                )
             == s_c.get_member_list(crew_members,
                                    ship_systems,
-                                   s_c.get_member_count_of_systems,
-                                   s_c.get_member_bonuses)
+                                    )
             )
 
 

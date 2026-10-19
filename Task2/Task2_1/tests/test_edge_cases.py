@@ -1,6 +1,15 @@
+import pytest
+
 import Task2.Task2_1.solution_loops as s_p
 import Task2.Task2_1.solution_comprehensions as s_c
 
+from Task2.Task2_1.data import library_archive
+
+def test_avg_pages_single_book_uses_approx():
+    # Ручной расчёт по данным из data.py (страницы по порядку записей):
+    # 310 + 432 + 384 + 281 + 412 + 180 + 304 + 288 + 234 + 476 = 3301
+    # 3301 / 10 книг = 330.1
+    assert s_c.get_avg_page_count_from_library(library_archive) == pytest.approx(330.1)
 
 def test_get_sci_fi_books():
     assert s_p.get_sci_fi_books([]) == s_c.get_sci_fi_books([])
@@ -32,11 +41,8 @@ def test_get_little_system():
 def test_get_member_list():
     assert (s_p.get_member_list([],
                                 {},
-                                s_p.get_member_count_of_systems,
-                                s_p.get_member_bonuses
                                )
             == s_c.get_member_list([],
                                    {},
-                                   s_c.get_member_count_of_systems,
-                                   s_c.get_member_bonuses)
+                                   )
             )
